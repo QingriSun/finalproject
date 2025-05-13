@@ -1,8 +1,8 @@
 // a frame with two bottom: New Game, Continue
 
-package finalproject.sqr_finalproject.src.src.view.game;
+package finalproject.sqr_finalproject.src.view.game;
 
-import finalproject.sqr_finalproject.src.src.view.FrameUtil;
+import finalproject.sqr_finalproject.src.view.FrameUtil;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

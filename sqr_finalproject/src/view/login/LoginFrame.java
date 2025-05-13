@@ -1,9 +1,9 @@
 // initialize the register window
 // function the "confirm" button (to be done), and the "restart" button.
 
-package finalproject.sqr_finalproject.src.src.view.login;
+package finalproject.sqr_finalproject.src.view.login;
 
-import finalproject.sqr_finalproject.src.src.view.FrameUtil;
+import finalproject.sqr_finalproject.src.view.FrameUtil;
 import src.view.game.GameFrame;
 import src.view.game.GameStartInterface;
 

@@ -1,10 +1,10 @@
 //print the panel, initial, make concise method regarding key event, make mouse click method
 
-package finalproject.sqr_finalproject.src.src.view.game;
+package finalproject.sqr_finalproject.src.view.game;
 
-import finalproject.sqr_finalproject.src.src.controller.GameController;
-import finalproject.sqr_finalproject.src.src.model.Direction;
-import finalproject.sqr_finalproject.src.src.model.MapModel;
+import finalproject.sqr_finalproject.src.controller.GameController;
+import finalproject.sqr_finalproject.src.model.Direction;
+import finalproject.sqr_finalproject.src.model.MapModel;
 
 import javax.swing.*;
 import javax.swing.border.Border;

@@ -1,6 +1,6 @@
 // paint the boxes.(color, select situation
 
-package finalproject.sqr_finalproject.src.src.view.game;
+package finalproject.sqr_finalproject.src.view.game;
 
 import javax.swing.*;
 import javax.swing.border.Border;

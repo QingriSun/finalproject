@@ -1,4 +1,4 @@
-package finalproject.sqr_finalproject.src.src;
+package finalproject.sqr_finalproject.src;
 
 import src.model.MapModel;
 import src.view.game.*;

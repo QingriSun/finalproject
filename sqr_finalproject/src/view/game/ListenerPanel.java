@@ -1,6 +1,6 @@
 // how to response to mouse and key event
 
-package finalproject.sqr_finalproject.src.src.view.game;
+package finalproject.sqr_finalproject.src.view.game;
 
 import javax.swing.*;
 import java.awt.*;
