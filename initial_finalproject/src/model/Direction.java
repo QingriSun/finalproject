@@ -1,5 +1,3 @@
-// define four direction
-
 package model;
 
 public enum Direction {
@@ -8,7 +6,6 @@ public enum Direction {
     private final int row;
     private final int col;
 
-    // constructor, no modification
     Direction(int row, int col) {
         this.row = row;
         this.col = col;

@@ -1,11 +1,13 @@
 // a huge constructor, set up the window of the game
 // how the buttons on the frame work remain to be done
 
-package finalproject.sqr_finalproject.src.view.game;
+package view.game;
 
-import finalproject.sqr_finalproject.src.controller.GameController;
-import finalproject.sqr_finalproject.src.model.MapModel;
-import finalproject.sqr_finalproject.src.view.FrameUtil;
+import controller.GameController;
+import model.MapModel;
+import view.FrameUtil;
+import view.game.GamePanel;
+import view.game.MovementPanel;
 
 import javax.swing.*;
 import java.awt.*;

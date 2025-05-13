@@ -1,9 +1,7 @@
-package finalproject.sqr_finalproject.src;
-
-import src.model.MapModel;
-import src.view.game.*;
-import src.view.login.LoginFrame;
-import src.view.game.GameStartInterface;
+import model.MapModel;
+import view.game.*;
+import view.login.LoginFrame;
+import view.game.GameStartInterface;
 
 import javax.swing.*;
 
@@ -23,16 +21,16 @@ public class Main {
 //                    {0, 0, 4, 4}
 
                     // represent the matrix in an improved way
-                    {10, 20, 20, 13},
-                    {11, 30, 21, 21},
-                    {12, 30, 40, 40},
-                    {0, 0, 40, 40}
+//                    {10, 20, 20, 13},
+//                    {11, 30, 21, 21},
+//                    {12, 30, 40, 40},
+//                    {0, 0, 40, 40}
 
                     // matrix qualified for Task 2
-//                    {10, 20, 20, 21, 21},
-//                    {0, 12, 30, 40, 40},
-//                    {0, 13, 30, 40, 40},
-//                    {11, 22, 22, 23, 23}
+                    {21, 21, 20, 20, 10},
+                    {40, 40, 30, 12, 0},
+                    {40, 40, 30, 13, 0},
+                    {23, 23, 22, 22, 11}
 
             });
 

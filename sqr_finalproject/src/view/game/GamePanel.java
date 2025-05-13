@@ -1,10 +1,10 @@
 //print the panel, initial, make concise method regarding key event, make mouse click method
 
-package src.view.game;
+package view.game;
 
-import src.controller.GameController;
-import src.model.Direction;
-import src.model.MapModel;
+import controller.GameController;
+import model.Direction;
+import model.MapModel;
 
 import javax.swing.*;
 import javax.swing.border.Border;

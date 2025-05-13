@@ -1,6 +1,6 @@
-package finalproject.sqr_finalproject.src.view.game;
+package view.game;
 
-import finalproject.sqr_finalproject.src.view.FrameUtil;
+import view.FrameUtil;
 
 import javax.swing.*;
 import java.awt.*;

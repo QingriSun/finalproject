@@ -7,11 +7,7 @@ import java.awt.*;
  * This class is to create basic JComponent.
  */
 public class FrameUtil {
-
-    // return a JLabel variable
-    // username: password
-    public static JLabel createJLabel(JFrame frame, Point location, int width, int height, String text)
-    {
+    public static JLabel createJLabel(JFrame frame, Point location, int width, int height, String text) {
         JLabel jLabel = new JLabel(text);
         jLabel.setSize(width, height);
         jLabel.setLocation(location);
@@ -19,8 +15,6 @@ public class FrameUtil {
         return jLabel;
     }
 
-    // overload
-    // step:
     public static JLabel createJLabel(JFrame frame, String name, Font font, Point location, int width, int height) {
         JLabel label = new JLabel(name);
         label.setFont(font);
@@ -44,16 +38,6 @@ public class FrameUtil {
         button.setSize(width, height);
         frame.add(button);
         return button;
-    }
-
-    public static JPanel createPanel(JFrame frame, Point location, int width, int height, Color color)
-    {
-        JPanel panel = new JPanel();
-        panel.setLocation(location);
-        panel.setSize(width, height);
-        panel.setBackground(color);
-        frame.add(panel);
-        return panel;
     }
 
 }

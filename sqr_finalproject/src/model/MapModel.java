@@ -1,4 +1,4 @@
-package finalproject.sqr_finalproject.src.model;
+package model;
 
 import java.sql.Array;
 
