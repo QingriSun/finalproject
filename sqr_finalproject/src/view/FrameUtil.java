@@ -1,4 +1,4 @@
-package src.view;
+package finalproject.sqr_finalproject.src.view;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,18 +1,13 @@
 // have methods to restart games, move boxes
 // to have methods to reload games, save games
 
-package src.controller;
+package finalproject.sqr_finalproject.src.controller;
 
-import src.model.Direction;
 import src.model.MapModel;
 import src.view.game.BoxComponent;
-import src.view.game.GamePanel;
+import finalproject.sqr_finalproject.src.view.game.GamePanel;
 
 import src.model.Direction;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
 
 import static javax.swing.SwingUtilities.paintComponent;
 

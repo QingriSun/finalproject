@@ -1,11 +1,9 @@
-package src.view.game;
+package finalproject.sqr_finalproject.src.view.game;
 
-import src.model.MapModel;
-import src.view.game.GamePanel;
+import finalproject.sqr_finalproject.src.model.MapModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
 public class MovementPanel extends JPanel {
     private JButton btnUp, btnDown, btnLeft, btnRight;

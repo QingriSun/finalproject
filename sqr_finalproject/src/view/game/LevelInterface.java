@@ -1,13 +1,9 @@
-package src.view.game;
+package finalproject.sqr_finalproject.src.view.game;
 
-import src.view.FrameUtil;
+import finalproject.sqr_finalproject.src.view.FrameUtil;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class LevelInterface extends JFrame{

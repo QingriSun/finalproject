@@ -1,8 +1,8 @@
 // say "Game Win!" and a bottom to end the program operation
 
-package src.view.game;
+package finalproject.sqr_finalproject.src.view.game;
 
-import src.view.FrameUtil;
+import finalproject.sqr_finalproject.src.view.FrameUtil;
 
 import javax.swing.*;
 import java.awt.*;
