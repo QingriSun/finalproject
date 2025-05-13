@@ -1,7 +1,7 @@
 // have methods to restart games, move boxes
 // to have methods to reload games, save games
 
-package src.controller;
+package finalproject.sqr_finalproject.src.src.controller;
 
 import src.model.Direction;
 import src.model.MapModel;

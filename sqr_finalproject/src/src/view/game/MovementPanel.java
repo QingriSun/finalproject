@@ -1,6 +1,6 @@
-package src.view.game;
+package finalproject.sqr_finalproject.src.src.view.game;
 
-import src.model.MapModel;
+import finalproject.sqr_finalproject.src.src.model.MapModel;
 import src.view.game.GamePanel;
 
 import javax.swing.*;
