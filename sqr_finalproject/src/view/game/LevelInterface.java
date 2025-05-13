@@ -1,6 +1,8 @@
 package view.game;
 
 import view.FrameUtil;
+import view.login.LoginFrame;
+import view.Location;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +14,7 @@ public class LevelInterface extends JFrame{
     private JButton startGameBtn;
     private JPanel levelPanel;
     private JPanel levelNamePanel;
-    private ArrayList<GameStartInterface.Location> locations;
+    private ArrayList<Location> locations;
     private ArrayList<LevelInterface> levelInterfaces;
     private int level;
     static int LevelNumber = 1; // level = 1, 2, 3, 4, 5
@@ -21,15 +23,15 @@ public class LevelInterface extends JFrame{
     private GamePanel gamePanel;
     private GameFrame gameFrame;
 
-    public LevelInterface(GameStartInterface gameStartInterface) {
+    public LevelInterface(LoginFrame loginFrame) {
         this.setLayout(null);
         this.setSize(600, 450);
         this.setTitle("Level Choosing");
         this.gamePanel = gamePanel;
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.locations = gameStartInterface.getLocations();
-        this.levelInterfaces = gameStartInterface.getLevelInterfaces();
+        this.locations = loginFrame.getLocations();
+        this.levelInterfaces = loginFrame.getLevelInterfaces();
         this.level = LevelNumber;
         LevelNumber++;
 
@@ -45,7 +47,7 @@ public class LevelInterface extends JFrame{
                 this.setVisible(false); // hide the register page
                 for (int i = 0; i < LevelNumber - 1; i++)
                 {
-                    gameStartInterface.getLevelInterfaces().get(i).setVisible(false);
+                    loginFrame.getLevelInterfaces().get(i).setVisible(false);
                 }
             }
         });

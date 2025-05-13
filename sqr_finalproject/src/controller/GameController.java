@@ -4,9 +4,19 @@
 package controller;
 
 import model.MapModel;
+import model.SaveData;
+import model.User;
 import view.game.BoxComponent;
 import view.game.GamePanel;
 import model.Direction;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static javax.swing.SwingUtilities.paintComponent;
 
@@ -18,6 +28,7 @@ import static javax.swing.SwingUtilities.paintComponent;
 public class GameController {
     private final GamePanel view;
     private final MapModel model;
+    private int steps;
 
     // constructor of GameController
     // new GameController(view, madel);
@@ -253,6 +264,7 @@ public class GameController {
                 // ? what is the meaning of the magic number 2 ? : may be padding
                 box.setLocation(box.getCol() * view.getGRID_SIZE() + 2, box.getRow() * view.getGRID_SIZE() + 2); // GRID_SIZE is a final int 50
                 box.repaint(); // repaint
+                steps++;
                 return true; // the rectangular is moved
             }
         }
@@ -260,8 +272,63 @@ public class GameController {
         return false; // the rectangular can not be moved to the intended place (due to boundary or other rectangular)
     }
 
+    //add
+    public void saveGame(User user) {
+        if (user == null) {
+            JOptionPane.showMessageDialog(null, "Guests cannot save games!");
+            return;
+        }
 
+        try {
+            // 1. 准备数据
+            int[][] map = model.getMatrix();
+            SaveData data = new SaveData(map, steps);
 
-    //todo: add other methods such as loadGame, saveGame...
+            // 2. 创建用户存档目录
+            Path saveDir = Path.of("save", user.getUsername());
+            Files.createDirectories(saveDir);
+
+            // 3. 写入序列化文件
+            Path saveFile = saveDir.resolve("save.dat");
+            try (ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(saveFile))) {
+                oos.writeObject(data);
+            }
+
+            JOptionPane.showMessageDialog(null, "Game saved!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Save failed: " + e.getMessage());
+        }
+    }
+
+    public boolean loadGame(User user) {
+        if (user == null || user.getUsername() == null) {
+            JOptionPane.showMessageDialog(null, "Invalid user data");
+            return false;
+        }
+
+        Path saveFile = Paths.get("save", user.getUsername(), "save.dat");
+        if (!Files.exists(saveFile)) {
+            JOptionPane.showMessageDialog(null, "No saved game found");
+            return false;
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(saveFile))) {
+            SaveData data = (SaveData) ois.readObject();
+            // 更新模型
+            model.setMatrix(data.getMapState());
+
+            // 更新视图
+            view.setSteps(data.getSteps());
+            view.refresh();
+
+            return true;
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "Save file format error");
+            return false;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Load failed: " + e.getMessage());
+            return false;
+        }
+    }
+
 
 }

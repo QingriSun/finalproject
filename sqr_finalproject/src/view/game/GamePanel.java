@@ -226,6 +226,14 @@ public class GamePanel extends ListenerPanel {
         }
     }
 
+    //add
+    // 添加界面刷新方法
+    public void refresh() {
+        this.revalidate();
+        this.repaint();
+    }
+
+
     // change the step counter
     public void setStepLabel(JLabel stepLabel) {
         this.stepLabel = stepLabel;

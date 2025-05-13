@@ -1,7 +1,5 @@
 // a frame with two bottom: New Game, Continue
 
-package view.game;
-
 import view.FrameUtil;
 import view.game.GameFrame;
 
