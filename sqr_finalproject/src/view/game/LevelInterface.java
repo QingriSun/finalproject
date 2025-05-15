@@ -16,6 +16,9 @@ public class LevelInterface extends JFrame{
     private JPanel levelNamePanel;
     private ArrayList<Location> locations;
     private ArrayList<LevelInterface> levelInterfaces;
+
+    private int[][] levelMatrix;
+
     private int level;
     static int LevelNumber = 1; // level = 1, 2, 3, 4, 5
 
