@@ -1,5 +1,6 @@
 package view.game;
 
+import model.MapModel;
 import view.FrameUtil;
 import view.login.LoginFrame;
 import view.Location;
@@ -17,6 +18,14 @@ public class LevelInterface extends JFrame{
     private ArrayList<Location> locations;
     private ArrayList<LevelInterface> levelInterfaces;
 
+    // multilevel
+    private int[][][] levelMatrixs = {
+            {{10, 20, 20, 13}, {11, 30, 21, 21}, {12, 30, 40, 40}, {0, 0, 40, 40}},
+            {{21, 21, 20, 20, 10}, {40, 40, 30, 12, 0}, {40, 40, 30, 13, 0}, {23, 23, 22, 22, 11}},
+            {{0, 20, 20, 10, 11}, {40, 40, 21, 21, 12}, {40, 40, 22, 22, 30}, {0, 23, 23, 13, 30}},
+            {{20, 20, 10, 21, 21}, {40, 40, 11, 30, 0}, {40, 40, 12, 30, 0}, {22, 22, 13, 23, 23}},
+            {{10, 11, 20, 20, 0}, {40, 40, 21, 21, 30}, {40, 40, 22, 22, 30}, {12, 13, 23, 23, 0}}
+    };
     private int[][] levelMatrix;
 
     private int level;
@@ -36,6 +45,7 @@ public class LevelInterface extends JFrame{
         this.locations = loginFrame.getLocations();
         this.levelInterfaces = loginFrame.getLevelInterfaces();
         this.level = LevelNumber;
+        this.levelMatrix = levelMatrixs[level - 1];
         LevelNumber++;
 
         lastLevelBtn = FrameUtil.createButton(this, "", new Point(10, this.getHeight() / 2 - 40), 20, 40);
@@ -46,7 +56,9 @@ public class LevelInterface extends JFrame{
 
         startGameBtn.addActionListener(e -> {
             if (this.gameFrame != null) {
-                this.gameFrame.setVisible(true); // turn to the game-start frame
+                // change the map
+                GameFrame levelGameFrame = new GameFrame(gameFrame.getWidth(), gameFrame.getHeight(), new MapModel(levelMatrix), gameFrame.getUser());
+                levelGameFrame.setVisible(true); // turn to the game-start frame
                 this.setVisible(false); // hide the register page
                 for (int i = 0; i < LevelNumber - 1; i++)
                 {

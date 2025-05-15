@@ -141,6 +141,10 @@ public class GameFrame extends JFrame {
         return user == null;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public GamePanel getGamePanel()
     {
         return gamePanel;
