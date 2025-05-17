@@ -9,7 +9,7 @@ public class MovementPanel extends JPanel {
     private JButton btnUp, btnDown, btnLeft, btnRight;
     private JPanel empty1, empty2, empty3, empty4, empty5;
     private MapModel mapmodel;
-    private final static int GRID_SIZE = 50;
+    private final static int GRID_SIZE = 100;
 
     // constructor
     public MovementPanel(GamePanel gamePanel)

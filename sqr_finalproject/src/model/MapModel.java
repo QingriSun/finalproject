@@ -28,7 +28,7 @@ public class MapModel {
         }
     }
 
-    public void setMatrix(int matrix[][])
+    public void setMatrix(int[][] matrix)
     {
         copyMatrix(matrix, this.matrix);
     }

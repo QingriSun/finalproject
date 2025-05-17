@@ -4,6 +4,7 @@ import view.game.*;
 import view.login.LoginFrame;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,13 +20,20 @@ public class Main {
 
             User user = null;
 
-            // initialize the game frame`
-            GameFrame gameFrame = new GameFrame(600, 450, mapModel, user);
-            gameFrame.setVisible(false);
-            // initialize the login frame
-            LoginFrame loginFrame = new LoginFrame(280, 280, gameFrame);
-            loginFrame.setVisible(true);
 
+            // set a background window
+            JWindow jWindow = new JWindow();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            jWindow.setSize(screenSize);
+            jWindow.setVisible(true);
+            // initialize the game frame`
+            GameFrame gameFrame = new GameFrame(1200, 900, mapModel, user);
+            gameFrame.setVisible(false);
+            gameFrame.setjWindow(jWindow);
+            // initialize the login frame
+            LoginFrame loginFrame = new LoginFrame(840, 840, gameFrame);
+            loginFrame.setVisible(true);
+            loginFrame.setJWindow(jWindow);
         });
     }
 }

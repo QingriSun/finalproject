@@ -11,6 +11,8 @@ import view.FrameUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GameFrame extends JFrame {
 
@@ -29,44 +31,93 @@ public class GameFrame extends JFrame {
     private GamePanel gamePanel;
     private MovementPanel movementPanel;
     private JPanel exitPanel;
+    private JWindow jWindow;
+
+    // time mode
+    private int timeUsed = 0;
+    private int timeAttack;
+    private static  int[] timeAttacks = {10, 3, 180, 240, 300};
+    private Timer timer;
+    private JLabel timeLabel;
+    private TimesUpFrame timesUpFrame;
+    private GameFrame gameFrame;
+    private int level;
 
     // constructor, new GameFrame(width, height, mapMadel)
     public GameFrame(int width, int height, MapModel mapModel, User user) {
 // the title can be modified
-        this.setTitle("2025 CS109 Project Demo");
+        this.setTitle("Klotski Puzzle");
         this.setLayout(null); // have no layout manager
         this.setSize(width, height);
 
         gamePanel = new GamePanel(mapModel);
         movementPanel = new MovementPanel(gamePanel);
-        movementPanel.setLocation(width / 2 + 20, height / 2 - movementPanel.getHeight() / 2);
+        movementPanel.setLocation(650, 200);
         this.add(movementPanel);
-        int gamePanelX = 30;
-        gamePanel.setLocation(gamePanelX, height / 2 - gamePanel.getHeight() / 2); // the y coordinate is dependent on the size of the frame and panel
+        int gamePanelX = 60;
+        gamePanel.setLocation(100, 150); // the y coordinate is dependent on the size of the frame and panel
         this.add(gamePanel);
         this.controller = new GameController(gamePanel, mapModel);
 
         //add
         this.user = user;
-        this.userLabel = FrameUtil.createJLabel(this,(user != null) ? user.getUsername() : "Guest", new Font("serif", Font.ITALIC, 22), new Point(gamePanel.getWidth() + 80, 18), 180, 50);
-        this.saveBtn = FrameUtil.createButton(this, "Save", new Point(gamePanel.getWidth() + 80, 310), 80, 50);
+        this.userLabel = FrameUtil.createJLabel(this,(user != null) ? user.getUsername() : "Guest", new Font("serif", Font.ITALIC, 22), new Point(300, 80), 180, 50);
+        this.saveBtn = FrameUtil.createButton(this, "Save", new Point(200, 580), 80, 40);
 
         // tell the user where the exit is
         exitPanel = new JPanel();
         exitPanel.setVisible(true);
-        exitPanel.setSize(20, 2 * gamePanel.getGRID_SIZE());
+        exitPanel.setSize(40, 2 * gamePanel.getGRID_SIZE());
         exitPanel.setLocation(gamePanel.getX() + gamePanel.getWidth(), gamePanel.getY() + gamePanel.getWidth() / 4);
         exitPanel.setBackground(Color.cyan);
         this.add(exitPanel);
 
-        this.restartBtn = FrameUtil.createButton(this, "Restart", new Point(gamePanelX, height / 2 - 150), 80, 40);
-        this.loadBtn = FrameUtil.createButton(this, "Load", new Point(gamePanelX + 80 + 20,height /2 -150), 80, 40);
-        this.withdrawBtn = FrameUtil.createButton(this, "Withdraw", new Point(gamePanelX, height / 2 + 110), 80, 40);
-        this.stepLabel = FrameUtil.createJLabel(this, "Start", new Font("serif", Font.ITALIC, 22), new Point(gamePanel.getWidth() + 80, 70), 180, 50);
+        this.restartBtn = FrameUtil.createButton(this, "Restart", new Point(100, 80), 80, 40);
+        this.loadBtn = FrameUtil.createButton(this, "Load", new Point(200,80), 80, 40);
+        this.withdrawBtn = FrameUtil.createButton(this, "Back", new Point(100, 580), 80, 40);
+        this.stepLabel = FrameUtil.createJLabel(this, "Start", new Font("serif", Font.ITALIC, 22), new Point(650, 80), 180, 50);
         gamePanel.setStepLabel(stepLabel);
+
+        // consider the GameFrame created in Main
+        if (level == 0)
+        {
+            level = 1;
+        }
+        // set a label to show time used
+        timeLabel = FrameUtil.createJLabel(this,String.format("Time: %02d : %02d", timeAttack / 60, timeAttack % 60), new Font("serif", Font.ITALIC, 22), new Point(800, 80),180, 50);
+        this.add(timeLabel);
+        timesUpFrame = new TimesUpFrame(this);
+
+        // int the field of an inner class in the public class, I should create a variable to substitute "this"
+        this.gameFrame = this;
+        // set a timer
+        timer = new Timer(1000, new ActionListener()
+        {
+            int min;
+            int sec;
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                timeUsed++;
+                min = (timeAttack - timeUsed) / 60;
+                sec = (timeAttack - timeUsed) % 60;
+                timeLabel.setText(String.format("Time: %02d : %02d", min, sec));
+                if (timeUsed == timeAttack)
+                {
+                    timer.stop();
+                    timesUpFrame.getImformation().setText( String.format("Steps: %d Time: %02d: %02d",
+                            gameFrame.getGamePanel().getSteps(), gameFrame.getTimeUsed() / 60, gameFrame.getTimeUsed() % 60));
+                    timesUpFrame.setVisible(true);
+                    gameFrame.setVisible(false);
+                }
+            }
+        });
 
         this.restartBtn.addActionListener(e -> // e for event, induced by the system
         {
+            timeLabel.setText(String.format("Time: %02d : %02d", timeAttack / 60, timeAttack % 60));
+            timeUsed = 0;
+            timer.restart();
             controller.restartGame();
             gamePanel.requestFocusInWindow();//enable key listener
         });
@@ -133,7 +184,7 @@ public class GameFrame extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // set the location of the victoryInterface
-        getGamePanel().getVictoryInterface().setLocationRelativeTo(getMovementPanel().getBtnRight());
+//        getGamePanel().getVictoryInterface().setLocationRelativeTo(getMovementPanel().getBtnRight());
     }
 
     //add
@@ -153,5 +204,51 @@ public class GameFrame extends JFrame {
     public MovementPanel getMovementPanel()
     {
         return movementPanel;
+    }
+
+    public Timer getTimer()
+    {
+        return timer;
+    }
+
+    public GameController getController()
+    {
+        return controller;
+    }
+
+    public JLabel getTimeLabel() {
+        return timeLabel;
+    }
+
+    public int getTimeAttack() {
+        return timeAttack;
+    }
+
+    public int getTimeUsed() {
+        return timeUsed;
+    }
+
+    public TimesUpFrame getTimesUpFrame() {
+        return timesUpFrame;
+    }
+
+    public static int[] getTimeAttacks() {
+        return timeAttacks;
+    }
+
+    public void setTimeUsed(int timeUsed) {
+        this.timeUsed = timeUsed;
+    }
+
+    public void setjWindow(JWindow jWindow) {
+        this.jWindow = jWindow;
+    }
+
+    public void setTimeAttack(int timeAttack) {
+        this.timeAttack = timeAttack;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

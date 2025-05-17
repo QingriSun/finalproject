@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserService {
+public class  UserService {
     private static final String USER_DATA = "users.dat";
     private Map<String, User> users = new HashMap<>();
     private User currentUser;

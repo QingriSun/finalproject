@@ -10,7 +10,9 @@ import service.UserService;
 import view.FrameUtil;
 import view.Location;
 import view.game.GameFrame;
+import view.game.GamePanel;
 import view.game.LevelInterface;
+import view.game.TimesUpFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -27,6 +29,8 @@ public class LoginFrame extends JFrame {
     private JButton submitBtn;
     private JButton resetBtn;
     private GameFrame gameFrame;
+    private JPanel jPanel;
+    private JWindow jWindow;
 
     private ArrayList<LevelInterface> levelInterfaces;
     private ArrayList<Location> locations;
@@ -37,16 +41,16 @@ public class LoginFrame extends JFrame {
     Dimension screenSize = toolkit.getScreenSize();
     int screenWidth = screenSize.width;
     int screenHeight = screenSize.height;
-    int levelInterfaceWidth = 600;
-    int levelInterfaceHeight = 450;
+    int levelInterfaceWidth = 1200;
+    int levelInterfaceHeight = 900;
     int spacing = 40;
     int firstX = screenWidth / 2 - levelInterfaceWidth / 2 - spacing * 2;
     int firstY = screenHeight / 2 - levelInterfaceHeight / 2;
 
-    //add
-    private JButton guestBtn = FrameUtil.createButton(this, "Guest", new Point(100, 200), 100, 40);
-    private JButton registerBtn = FrameUtil.createButton(this, "Register", new Point(100, 260), 100, 40);
-    private UserService userService = new UserService();
+//    //add
+//    private JButton guestBtn = FrameUtil.createButton(this, "Guest", new Point(100, 200), 100, 40);
+//    private JButton registerBtn = FrameUtil.createButton(this, "Register", new Point(100, 260), 100, 40);
+//    private UserService userService = new UserService();
 
 
     //constructor, a window
@@ -54,13 +58,21 @@ public class LoginFrame extends JFrame {
         this.setTitle("Login Frame");
         this.setLayout(null);
         this.setSize(width, height);
-        JLabel userLabel = FrameUtil.createJLabel(this, new Point(50, 20), 70, 40, "username:");
-        JLabel passLabel = FrameUtil.createJLabel(this, new Point(50, 80), 70, 40, "password:");
-        username = FrameUtil.createJTextField(this, new Point(120, 20), 120, 40);
-        password = FrameUtil.createJPasswordField(this, new Point(120, 80), 120, 40);
+
+        this.jPanel = new JPanel();
+        jPanel.setLayout(null);
+        jPanel.setSize(280, 280);
+        jPanel.setBackground(Color.LIGHT_GRAY);
+
+        JLabel userLabel = FrameUtil.createJLabel(jPanel, new Point(50, 80), 70, 40, "username:");
+        JLabel passLabel = FrameUtil.createJLabel(jPanel, new Point(50, 140), 70, 40, "password:");
+        username = FrameUtil.createJTextField(jPanel, new Point(120, 80), 120, 40);
+        password = FrameUtil.createJPasswordField(jPanel, new Point(120, 140), 120, 40);
+
         this.gameFrame = gameframe;
 
-        submitBtn = FrameUtil.createButton(this, "Confirm", new Point(40, 140), 100, 40);
+        submitBtn = FrameUtil.createButton(jPanel, "Confirm", new Point(40, 200), 100, 40);
+        resetBtn = FrameUtil.createButton(jPanel, "Reset", new Point(160, 200), 100, 40);
 
         //add
         char[] passwordChars = password.getPassword();
@@ -87,9 +99,8 @@ public class LoginFrame extends JFrame {
             x += spacing;
         }
 
-
-
-        resetBtn = FrameUtil.createButton(this, "Reset", new Point(160, 140), 100, 40);
+        jPanel.setLocation(this.getWidth() / 2 - jPanel.getWidth() / 2, this.getHeight() / 2 - jPanel.getHeight() + 100);
+        this.add(jPanel);
 
         // after the summit button is pressed
         submitBtn.addActionListener(e -> {
@@ -99,12 +110,14 @@ public class LoginFrame extends JFrame {
             //add
             if(UserController.validateUser(username.getText(), password.getText())){
                 User user = new User(username.getText(), password.getText());
-                gameFrame.setVisible(true);
                 this.setVisible(false);
 
                 // set the location of the levelInterfaces
+                jWindow.toFront();
                 for (int i = levelNum - 1; i >= 0; i--)
                 {
+                    levelInterfaces.get(i).toFront();
+                    levelInterfaces.get(i).setjWindow(jWindow);
                     levelInterfaces.get(i).setLocation(new Point(locations.get(i).getX(), locations.get(i).getY()));
                     levelInterfaces.get(i).setVisible(true);
                 }
@@ -119,8 +132,11 @@ public class LoginFrame extends JFrame {
                 // set the name of the level
 //            setPanelImage(levelInterface1.getLevelNamePanel(), "black.png");
 
+                // when levelInterfaces the ArrayList is completely set, transmit it to TimesUpFrame
+                TimesUpFrame.setLevelInterfaces(levelInterfaces);
+
                 // set the location of the VictoryFrame，why it acts as if this.getMovementPanel.getBtnRight = null
-                this.gameFrame.getGamePanel().getVictoryInterface().setLocationRelativeTo(this.gameFrame.getMovementPanel().getBtnRight());
+//                this.gameFrame.getGamePanel().getVictoryInterface().setLocationRelativeTo(this.gameFrame.getMovementPanel().getBtnRight());
             }
             else
             {
@@ -136,13 +152,13 @@ public class LoginFrame extends JFrame {
             username.setText("");
             password.setText("");
         });
-
-        //add
-        guestBtn.addActionListener(e -> {
-            userService.setGuest();
-//            launchGame();
-        });
-        registerBtn.addActionListener(e -> showRegisterDialog());
+//
+//        //add
+//        guestBtn.addActionListener(e -> {
+//            userService.setGuest();
+////            launchGame();
+//        });
+//        registerBtn.addActionListener(e -> showRegisterDialog());
 
         this.setLocationRelativeTo(null); // the register frame is in the middle of the screen
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -156,15 +172,18 @@ public class LoginFrame extends JFrame {
         {
             BufferedImage originalImage = ImageIO.read(imageFile);
 
-            // squeeze the original image
-            int scale = Math.max(originalImage.getWidth() / JPanelTargetPanel.getWidth(), originalImage.getHeight() / JPanelTargetPanel.getHeight()) + 1;
-            // if the original image is smaller than the panel, draw the original size image
-            if (scale == 0)
-            {
-                scale = 1;
-            }
-            int targetWidth = originalImage.getWidth() / scale;
-            int targetHeight = originalImage.getHeight() / scale;
+//            // squeeze the original image
+//            int scale = Math.max(originalImage.getWidth() / JPanelTargetPanel.getWidth(), originalImage.getHeight() / JPanelTargetPanel.getHeight()) + 1;
+//            // if the original image is smaller than the panel, draw the original size image
+//            if (scale == 0)
+//            {
+//                scale = 1;
+//            }
+//            int targetWidth = originalImage.getWidth() / scale;
+//            int targetHeight = originalImage.getHeight() / scale;
+            int targetWidth = originalImage.getWidth() ;
+            int targetHeight = originalImage.getHeight();
+
             // put the image to the targetPanel
             Image scaledImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             ImageIcon imageIcon = new ImageIcon(scaledImage);
@@ -179,30 +198,30 @@ public class LoginFrame extends JFrame {
 
     }
 
-    //add
-    private void showRegisterDialog() {
-        JTextField regUser = new JTextField();
-        JPasswordField regPass = new JPasswordField();
-        Object[] fields = {"Username:", regUser, "Password:", regPass};
-
-        int option = JOptionPane.showConfirmDialog(this, fields, "Register",
-                JOptionPane.OK_CANCEL_OPTION);
-
-        if (option == JOptionPane.OK_OPTION) {
-            String username = regUser.getText().trim();
-            String password = new String(regPass.getPassword());
-            if (username.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Username and password cannot be empty!");
-                return;
-            }
-            User newUser = new User(username, password);
-            if (userService.register(newUser)) {
-                JOptionPane.showMessageDialog(this, "Registration successful!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Username already exists!");
-            }
-        }
-    }
+//    //add
+//    private void showRegisterDialog() {
+//        JTextField regUser = new JTextField();
+//        JPasswordField regPass = new JPasswordField();
+//        Object[] fields = {"Username:", regUser, "Password:", regPass};
+//
+//        int option = JOptionPane.showConfirmDialog(this, fields, "Register",
+//                JOptionPane.OK_CANCEL_OPTION);
+//
+//        if (option == JOptionPane.OK_OPTION) {
+//            String username = regUser.getText().trim();
+//            String password = new String(regPass.getPassword());
+//            if (username.isEmpty() || password.isEmpty()) {
+//                JOptionPane.showMessageDialog(this, "Username and password cannot be empty!");
+//                return;
+//            }
+//            User newUser = new User(username, password);
+//            if (userService.register(newUser)) {
+//                JOptionPane.showMessageDialog(this, "Registration successful!");
+//            } else {
+//                JOptionPane.showMessageDialog(this, "Username already exists!");
+//            }
+//        }
+//    }
 
 //    private void launchGame() {
 //        User currentUser = userService.getCurrentUser();
@@ -227,6 +246,10 @@ public class LoginFrame extends JFrame {
         ALevelInterface.setGameFrame(gameFrame);
         ALevelInterface.setGamePanel(gameFrame.getGamePanel());
         levelInterfaces.add(ALevelInterface);
+    }
+
+    public void setJWindow(JWindow jWindow) {
+        this.jWindow = jWindow;
     }
 
     public ArrayList<Location> getLocations()

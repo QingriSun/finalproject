@@ -23,9 +23,9 @@ public class GamePanel extends ListenerPanel {
     private GameController controller;
     private JLabel stepLabel;
     private int steps;
-    private final int GRID_SIZE = 50;
+    private final int GRID_SIZE = 100;
     private BoxComponent selectedBox;
-    private VictoryInterface victoryInterface;
+//    private VictoryInterface victoryInterface;
     // to record every state after every move
     private int[][] gameState ;
     // store the state (two-dimensional list)
@@ -40,7 +40,7 @@ public class GamePanel extends ListenerPanel {
         this.setSize(model.getWidth() * GRID_SIZE + 4, model.getHeight() * GRID_SIZE + 4); // GRID_SIZE is a unit length
         this.model = model;
         this.selectedBox = null;
-        this.victoryInterface = new VictoryInterface(this);
+//        this.victoryInterface = new VictoryInterface(this);
         this.steps = 0;
 
         gameState = new int[model.getMatrix().length][model.getMatrix()[0].length];
@@ -153,6 +153,35 @@ public class GamePanel extends ListenerPanel {
                 selectedBox = null;
             }
         }
+        else if (component instanceof GamePanel)// the mouse clicked an empty space
+        {
+            if (selectedBox != null)
+            {
+                int pointX = point.x;
+                int pointY = point.y;
+                double selectedBoxX = selectedBox.getLocation().getX();
+                double selectedBoxY = selectedBox.getLocation().getY();
+                int spaceWidth = selectedBox.getWidth();
+                int spaceHeight = selectedBox.getHeight();
+
+                if (pointY < selectedBoxY && ((pointX > selectedBoxX && pointX < selectedBoxX + spaceWidth)))
+                {
+                    doMoveUp();
+                }
+                if (pointY > selectedBoxY && (pointX > selectedBoxX && pointX < selectedBoxX + spaceWidth))
+                {
+                    doMoveDown();
+                }
+                if (pointX < selectedBoxX && (pointY > selectedBoxY && pointY < selectedBoxY + spaceHeight))
+                {
+                    doMoveLeft();
+                }
+                if (pointX > selectedBoxX && (pointY > selectedBoxY && pointY < selectedBoxY + spaceHeight))
+                {
+                    doMoveRight();
+                }
+            }
+        }
     }
 
     @Override
@@ -221,8 +250,8 @@ public class GamePanel extends ListenerPanel {
             System.out.println("Game win");
             CaoCaoBox.setColor(Color.RED);
             repaint();
-            victoryInterface.getLabelGameWin().setText(String.format("Step: %d", this.getSteps()));
-            victoryInterface.setVisible(true);
+//            victoryInterface.getLabelGameWin().setText(String.format("Step: %d", this.getSteps()));
+//            victoryInterface.setVisible(true);
         }
     }
 
@@ -267,10 +296,10 @@ public class GamePanel extends ListenerPanel {
         return boxes;
     }
 
-    public VictoryInterface getVictoryInterface()
-    {
-        return victoryInterface;
-    }
+//    public VictoryInterface getVictoryInterface()
+//    {
+//        return victoryInterface;
+//    }
 
     public MapModel getModel()
     {

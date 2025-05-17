@@ -231,8 +231,8 @@ public class GameController {
                 {
                     model.getMatrix()[nextRow + 1][nextCol + 1] = Id;
                     model.getMatrix()[nextRow + 1][nextCol] = Id;
-                    model.getMatrix()[row - 1][col] = 0;
-                    model.getMatrix()[row - 1][col + 1] = 0;
+                    model.getMatrix()[row][col] = 0;
+                    model.getMatrix()[row][col + 1] = 0;
                     doMove = true;
                 }
                 if (direction == Direction.LEFT && model.checkInWidthSize(nextCol) && model.getId(nextRow, nextCol) == 0 && model.getId(nextRow + 1, nextCol) == 0)
