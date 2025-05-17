@@ -1,7 +1,5 @@
 package model;
 
-import java.sql.Array;
-
 
 /**
  * This class is to record the map of one game. For example:

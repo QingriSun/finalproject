@@ -26,6 +26,9 @@ public class GameFrame extends JFrame {
     private User user;
     private JLabel userLabel;
 
+    // transmit some variable to panel
+    private Timer timer;
+    private int timeUsed = 0;
 
     private JLabel stepLabel;
     private GamePanel gamePanel;
@@ -34,14 +37,14 @@ public class GameFrame extends JFrame {
     private JWindow jWindow;
 
     // time mode
-    private int timeUsed = 0;
+
     private int timeAttack;
     private static  int[] timeAttacks = {10, 3, 180, 240, 300};
-    private Timer timer;
     private JLabel timeLabel;
-    private TimesUpFrame timesUpFrame;
+    private EndFrame endFrame;
     private GameFrame gameFrame;
     private int level;
+    private int timeMode; // timeMode = 0: count up; timeMode = 1: count down
 
     // constructor, new GameFrame(width, height, mapMadel)
     public GameFrame(int width, int height, MapModel mapModel, User user) {
@@ -77,6 +80,7 @@ public class GameFrame extends JFrame {
         this.withdrawBtn = FrameUtil.createButton(this, "Back", new Point(100, 580), 80, 40);
         this.stepLabel = FrameUtil.createJLabel(this, "Start", new Font("serif", Font.ITALIC, 22), new Point(650, 80), 180, 50);
         gamePanel.setStepLabel(stepLabel);
+        gamePanel.setjWindow(jWindow);
 
         // consider the GameFrame created in Main
         if (level == 0)
@@ -86,7 +90,9 @@ public class GameFrame extends JFrame {
         // set a label to show time used
         timeLabel = FrameUtil.createJLabel(this,String.format("Time: %02d : %02d", timeAttack / 60, timeAttack % 60), new Font("serif", Font.ITALIC, 22), new Point(800, 80),180, 50);
         this.add(timeLabel);
-        timesUpFrame = new TimesUpFrame(this);
+        endFrame = new EndFrame(this);
+        gamePanel.setEndFrame(endFrame);
+        gamePanel.setGameFrame(this);
 
         // int the field of an inner class in the public class, I should create a variable to substitute "this"
         this.gameFrame = this;
@@ -99,23 +105,41 @@ public class GameFrame extends JFrame {
             public void actionPerformed(ActionEvent e)
             {
                 timeUsed++;
-                min = (timeAttack - timeUsed) / 60;
-                sec = (timeAttack - timeUsed) % 60;
-                timeLabel.setText(String.format("Time: %02d : %02d", min, sec));
-                if (timeUsed == timeAttack)
+                gamePanel.setTimeUsed(timeUsed);
+                if (timeMode == 1)
                 {
-                    timer.stop();
-                    timesUpFrame.getImformation().setText( String.format("Steps: %d Time: %02d: %02d",
-                            gameFrame.getGamePanel().getSteps(), gameFrame.getTimeUsed() / 60, gameFrame.getTimeUsed() % 60));
-                    timesUpFrame.setVisible(true);
-                    gameFrame.setVisible(false);
+                    min = (timeAttack - timeUsed) / 60;
+                    sec = (timeAttack - timeUsed) % 60;
+                    timeLabel.setText(String.format("Time: %02d : %02d", min, sec));
+                    if (timeUsed == timeAttack)
+                    {
+                        timer.stop();
+                        endFrame.getImformation().setText( String.format("Steps: %d Time: %02d: %02d",
+                                gameFrame.getGamePanel().getSteps(), gameFrame.getTimeUsed() / 60, gameFrame.getTimeUsed() % 60));
+                        endFrame.setVisible(true);
+                        gameFrame.setVisible(false);
+                    }
+                }
+                else
+                {
+                    min = timeUsed / 60;
+                    sec = timeUsed % 60;
+                    timeLabel.setText(String.format("Time: %02d : %02d", min, sec));
                 }
             }
         });
+        gamePanel.setTimer(timer);
 
         this.restartBtn.addActionListener(e -> // e for event, induced by the system
         {
-            timeLabel.setText(String.format("Time: %02d : %02d", timeAttack / 60, timeAttack % 60));
+            if (timeMode == 1)
+            {
+                timeLabel.setText(String.format("Time: %02d : %02d", timeAttack / 60, timeAttack % 60));
+            }
+            else if (timeMode == 0)
+            {
+                timeLabel.setText(String.format("Time: %02d : %02d", 0, 0));
+            }
             timeUsed = 0;
             timer.restart();
             controller.restartGame();
@@ -228,8 +252,8 @@ public class GameFrame extends JFrame {
         return timeUsed;
     }
 
-    public TimesUpFrame getTimesUpFrame() {
-        return timesUpFrame;
+    public EndFrame getTimesUpFrame() {
+        return endFrame;
     }
 
     public static int[] getTimeAttacks() {
@@ -251,4 +275,9 @@ public class GameFrame extends JFrame {
     public void setLevel(int level) {
         this.level = level;
     }
+
+    public void setTimeMode(int timeMode) {
+        this.timeMode = timeMode;
+    }
+
 }

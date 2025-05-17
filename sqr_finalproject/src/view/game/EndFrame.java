@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class TimesUpFrame extends JFrame
+public class EndFrame extends JFrame
 {
     private  GameFrame gameFrame;
     private static ArrayList<LevelInterface> levelInterfaces;
@@ -18,7 +18,7 @@ public class TimesUpFrame extends JFrame
     private JLabel imformation;
     private JWindow jWindow;
 
-    public TimesUpFrame(GameFrame gameFrame)
+    public EndFrame(GameFrame gameFrame)
     {
         // if time's up, bounce out a frame
         super("Time's up");
@@ -44,6 +44,7 @@ public class TimesUpFrame extends JFrame
             gameFrame.setTimeUsed(0);
             gameFrame.getTimeLabel().setText(String.format("Time: %02d : %02d", gameFrame.getTimeAttack() / 60, gameFrame.getTimeAttack() % 60));
             gameFrame.getTimer().restart();
+
         });
 
         endGameBtn.addActionListener(e ->
@@ -68,13 +69,17 @@ public class TimesUpFrame extends JFrame
         return imformation;
     }
 
+    public JLabel getMessage() {
+        return message;
+    }
+
     public void setGameFrame(GameFrame gameFrame)
     {
         this.gameFrame = gameFrame;
     }
 
     public static void setLevelInterfaces(ArrayList<LevelInterface> levelInterfaces) {
-        TimesUpFrame.levelInterfaces = levelInterfaces;
+        EndFrame.levelInterfaces = levelInterfaces;
     }
 
     public void setJWindow(JWindow jWindow) {

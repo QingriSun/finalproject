@@ -4,15 +4,12 @@
 package view.login;
 
 import controller.UserController;
-import model.MapModel;
 import model.User;
-import service.UserService;
 import view.FrameUtil;
 import view.Location;
 import view.game.GameFrame;
-import view.game.GamePanel;
 import view.game.LevelInterface;
-import view.game.TimesUpFrame;
+import view.game.EndFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -133,7 +130,7 @@ public class LoginFrame extends JFrame {
 //            setPanelImage(levelInterface1.getLevelNamePanel(), "black.png");
 
                 // when levelInterfaces the ArrayList is completely set, transmit it to TimesUpFrame
-                TimesUpFrame.setLevelInterfaces(levelInterfaces);
+                EndFrame.setLevelInterfaces(levelInterfaces);
 
                 // set the location of the VictoryFrame，why it acts as if this.getMovementPanel.getBtnRight = null
 //                this.gameFrame.getGamePanel().getVictoryInterface().setLocationRelativeTo(this.gameFrame.getMovementPanel().getBtnRight());

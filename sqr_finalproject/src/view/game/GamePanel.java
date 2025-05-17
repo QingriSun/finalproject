@@ -25,11 +25,16 @@ public class GamePanel extends ListenerPanel {
     private int steps;
     private final int GRID_SIZE = 100;
     private BoxComponent selectedBox;
-//    private VictoryInterface victoryInterface;
     // to record every state after every move
     private int[][] gameState ;
     // store the state (two-dimensional list)
     private ArrayList<int [][]> states;
+    private EndFrame endFrame;
+    // transmit some variable from gameFrame
+    private Timer timer;
+    private int timeUsed;
+    private GameFrame gameFrame;
+    private JWindow jWindow;
 
     // constructor, new GamePanel(mapModel)
     public GamePanel(MapModel model) {
@@ -247,11 +252,15 @@ public class GamePanel extends ListenerPanel {
         int currentY = CaoCaoBox.getRow() * getGRID_SIZE() + 2;
         if (currentX == targetLocationX && currentY == targetLocationY)
         {
+
             System.out.println("Game win");
             CaoCaoBox.setColor(Color.RED);
             repaint();
-//            victoryInterface.getLabelGameWin().setText(String.format("Step: %d", this.getSteps()));
-//            victoryInterface.setVisible(true);
+            timer.stop();
+            endFrame.getMessage().setText("You win!");
+            endFrame.getImformation().setText(String.format("Steps: %d Time: %02d: %02d",steps, timeUsed / 60, timeUsed % 60));
+            endFrame.setVisible(true);
+            gameFrame.setVisible(false);
         }
     }
 
@@ -268,18 +277,38 @@ public class GamePanel extends ListenerPanel {
         this.stepLabel = stepLabel;
     }
 
-
     public void setController(GameController controller) {
         this.controller = controller;
     }
 
-    public BoxComponent getSelectedBox() {
-        return selectedBox;
+    public void setEndFrame(EndFrame endFrame) {
+        this.endFrame = endFrame;
+    }
+
+    public void setGameFrame(GameFrame gameFrame) {
+        this.gameFrame = gameFrame;
     }
 
     public void setSteps(int steps)
     {
         this.steps = steps;
+    }
+
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
+    }
+
+    public void setTimeUsed(int timeUsed) {
+        this.timeUsed = timeUsed;
+    }
+
+    public void setjWindow(JWindow jWindow) {
+        this.jWindow = jWindow;
+    }
+
+    public BoxComponent getSelectedBox() {
+        return selectedBox;
     }
 
     public int getSteps()
@@ -295,11 +324,6 @@ public class GamePanel extends ListenerPanel {
     {
         return boxes;
     }
-
-//    public VictoryInterface getVictoryInterface()
-//    {
-//        return victoryInterface;
-//    }
 
     public MapModel getModel()
     {

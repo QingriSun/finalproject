@@ -7,16 +7,19 @@ import view.Location;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class LevelInterface extends JFrame{
     private JButton lastLevelBtn;
     private JButton nextLevelBtn;
-    private JButton startGameBtn;
+    private JButton normalModeGameBtn;
+    private JButton timeAttackModeBtn;
     private JPanel levelPanel;
     private JPanel levelNamePanel;
     private ArrayList<Location> locations;
     ArrayList<LevelInterface> levelInterfaces;
+    private GameFrame levelGameFrame;
 
     // multilevel
     private int[][][] levelMatrixs = {
@@ -36,6 +39,7 @@ public class LevelInterface extends JFrame{
     private GamePanel gamePanel;
     private GameFrame gameFrame;
     private JWindow jWindow;
+    private LevelInterface levelInterface;
 
     public LevelInterface(LoginFrame loginFrame) {
         this.setLayout(null);
@@ -47,33 +51,57 @@ public class LevelInterface extends JFrame{
         this.levelInterfaces = loginFrame.getLevelInterfaces();
         this.level = LevelNumber;
         this.levelMatrix = levelMatrixs[level - 1];
+        this.levelInterface = this;
         LevelNumber++;
 
         lastLevelBtn = FrameUtil.createButton(this, "", new Point(20, this.getHeight() / 2 - 80), 40, 80);
         nextLevelBtn = FrameUtil.createButton(this, "", new Point(getWidth() - 100, getHeight() / 2 - 80), 40, 80);
-        startGameBtn = FrameUtil.createButton(this, "Start Game", new Point(getWidth() / 2 - 120, getHeight() / 2 + 310), 240, 80);
+        normalModeGameBtn = FrameUtil.createButton(this, "Normal Mode", new Point(getWidth() / 2 - 260, getHeight() / 2 + 310), 240, 80);
+        timeAttackModeBtn = FrameUtil.createButton(this, "Time Attack Mode", new Point(getWidth() / 2 + 20, getHeight() / 2 + 310), 240, 80);
         levelPanel = FrameUtil.createPanel(this, new Point(getWidth() / 2 - 350, getHeight() / 2 - 300), 720, 600, Color.LIGHT_GRAY);
         levelNamePanel = FrameUtil.createPanel(this, new Point(getWidth() / 2 - 400, getHeight() / 2 - 430), 800, 100, Color.DARK_GRAY);
 
-        startGameBtn.addActionListener(e -> {
-            if (this.gameFrame != null) {
+
+        // the same action done after normal mode button and the time attack mode button are clicked
+        Action startGame = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 // change the map
                 // the initial gameFrame create in Main is substituted by levelGameFrame
-                GameFrame levelGameFrame = new GameFrame(gameFrame.getWidth(), gameFrame.getHeight(), new MapModel(levelMatrix), gameFrame.getUser());
+                levelGameFrame = new GameFrame(gameFrame.getWidth(), gameFrame.getHeight(), new MapModel(levelMatrix), gameFrame.getUser());
                 levelGameFrame.setjWindow(jWindow);
                 levelGameFrame.getTimesUpFrame().setJWindow(jWindow);
-                levelGameFrame.setTimeAttack(GameFrame.getTimeAttacks()[this.level - 1]);
-                levelGameFrame.setLevel(this.level);
-                // There is no correct timeAttack when newing levelGameFrame
-                levelGameFrame.getTimeLabel().setText(String.format("Time: %02d : %02d", levelGameFrame.getTimeAttack() / 60, levelGameFrame.getTimeAttack() % 60));
-                levelGameFrame.setVisible(true); // turn to the game-start frame
+                levelGameFrame.setTimeAttack(GameFrame.getTimeAttacks()[levelInterface.level - 1]);
+                levelGameFrame.setLevel(levelInterface.level);
                 levelGameFrame.getTimer().start();
-                this.setVisible(false); // hide the register page
+                levelInterface.setVisible(false); // hide the register page
                 for (int i = 0; i < LevelNumber - 1; i++)
                 {
                     loginFrame.getLevelInterfaces().get(i).setVisible(false);
                 }
             }
+        };
+
+        normalModeGameBtn.addActionListener(e ->
+        {
+            startGame.actionPerformed(e);
+            levelGameFrame.setTimeMode(0);
+            // There is no correct timeAttack when newing levelGameFrame
+            levelGameFrame.getTimeLabel().setText(String.format("Time: %02d : %02d", 0, 0));
+            levelGameFrame.setVisible(true); // turn to the game-start frame
+            jWindow.toFront();
+            levelGameFrame.toFront();
+        });
+
+        timeAttackModeBtn.addActionListener(e ->
+        {
+            startGame.actionPerformed(e);
+            levelGameFrame.setTimeMode(1);
+            // There is no correct timeAttack when newing levelGameFrame
+            levelGameFrame.getTimeLabel().setText(String.format("Time: %02d : %02d", levelGameFrame.getTimeAttack() / 60, levelGameFrame.getTimeAttack() % 60));
+            levelGameFrame.setVisible(true); // turn to the game-start frame
+            jWindow.toFront();
+            levelGameFrame.toFront();
         });
 
         nextLevelBtn.addActionListener(e ->{
